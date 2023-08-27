@@ -21,8 +21,9 @@ An example config for [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 ```lua
 {
     "Davidyz/executable-checker.nvim",
-    opts = { executables = { "rg" } },
-    config = true,
+    config = function()
+        require('executable-checker').setup({ executables = { "rg" } })
+    end,
 }
 ```
 
