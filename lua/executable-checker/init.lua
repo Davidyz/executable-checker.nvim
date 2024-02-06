@@ -7,8 +7,10 @@ return {
     end
   end,
   add_executable = function(exec)
-    if type(exec) == 'string' then
+    if type(exec) == "string" then
       vim.list_extend(config.executables, { exec })
+    elseif type(exec) == "table" then
+      vim.list_extend(config.executables, exec)
     end
   end,
 }
