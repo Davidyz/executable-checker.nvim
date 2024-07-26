@@ -29,7 +29,7 @@ An example config for [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 
 ### As a plugin developer
 
-If your plugin depends on a specific external command and you want to use this plugin to give users a nice 
+If your plugin depends on a specific external command, and you want to use this plugin to give users a nice 
 way to check for external dependencies, you can use this plugin as well. 
 
 You can put this in your code:
@@ -40,7 +40,12 @@ if status then
 end
 ```
 This way, if your plugin is loaded, when the user run `:checkhealth` or `:checkhealth executable-checker`, 
-`some_ext_command` will show up in the checkhealth page.
+`some_ext_command` will show up in the `checkhealth` page.
+
+`add_executable` can also accept a list of executables:
+```lua 
+checker.add_executable({"command1", "command2"})
+```
 
 ## Running the check
 
@@ -48,3 +53,27 @@ Simply run `:checkhealth` or `:checkhealth executable-checker` in normal mode. Y
 similar to the following.
 
 ![Example health check report](./images/demo01.png)
+
+## Group executables by package
+
+You may group the executables under different package names so that the report
+will be more organised and gives you a better idea of "what's this executable
+for?" when you go through the health report.
+To do so:
+
+* As a plugin user, when you configure this plugin, do this to put `rg` under the subsection for `telescope`.
+```lua
+{
+    "Davidyz/executable-checker.nvim",
+    config = function()
+        require('executable-checker').setup({ executables = { telescope = { "rg" } } })
+    end,
+}
+```
+* As a plugin developer, pass an extra parameter of `package_name` to `add_executable`: 
+```lua 
+local status, checker = pcall(require, 'executable-checker')
+if status then
+  checker.add_executable("some_ext_command", "my_plugin")
+end
+```
